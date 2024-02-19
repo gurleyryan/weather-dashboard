@@ -63,3 +63,41 @@ function formatDate(date) {
     return [month, day, year].join("/");
 }
 
+// Search history button
+function createNewCityButton(cityName, location) {
+    var cityBtnEl = document.createElement("button");
+    cityBtnEl.setAttribute("type", "button");
+    cityBtnEl.classList.add("list-group-item", "list-group-item-action");
+    cityBtnEl.textContent = cityName;
+    cityBtnEl.setAttribute("value", cityName);
+    location.prepend(cityBtnEl);
+    cityBtnEl.addEventListener("click", function () {
+        var allCityBtns = document.querySelectorAll(".list-group-item");
+        for (var i = 0; i < allCityBtns.length; i++) {
+            allCityBtns[i].classList.remove("active");
+        }
+        getCurrentWeather(cityBtnEl.value, apiKey);
+        getForecast(cityBtnEl.value, apiKey);
+        cityBtnEl.classList.add("active");
+    });
+}
+
+// Error message
+function errorMessage(msg, location, duration) {
+    var alertErrorDiv = document.createElement("div");
+    alertErrorDiv.classList.add(
+        "alert",
+        "alert-danger",
+        "text-center",
+        "pt-2",
+        "pb-0"
+    );
+    alertErrorDiv.innerHTML = "<p><strong>" + msg + "</strong></p>";
+
+    setTimeout(function () {
+        alertErrorDiv.parentElement.removeChild(alertErrorDiv);
+    }, duration);
+
+    location.prepend(alertErrorDiv);
+}
+
