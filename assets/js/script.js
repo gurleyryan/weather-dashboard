@@ -101,7 +101,7 @@ function errorMessage(msg, location, duration) {
     location.prepend(alertErrorDiv);
 }
 
-// Get and store current weather
+// Get current weather and store city names
 function getCurrentWeather(cityName, apiKey) {
     var url =
         openWeatherQueryUrl +
