@@ -7,6 +7,7 @@
 - [About](#about)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [Credits](#credits)
 - [License](#license)
 
 ## About
@@ -18,7 +19,7 @@ Built a weather dashboard that runs in the browser and features dynamically upda
 
 [Link to website](https://gurleyryan.github.io/weather-dashboard/)
 
-
+Search for a city in the top left search bar. The current weather and future forecast will display on the right. Your search will also be saved in a search history list on the left.
 
 ![Alt Text](assets/images/WeatherDashboard.png "Website Screenshot")
 
@@ -27,6 +28,14 @@ Built a weather dashboard that runs in the browser and features dynamically upda
 Contributors: <br />
 
 - [Ryan Gurley](https://github.com/gurleyryan)
+
+
+## Credits
+
+External Sources: <br />
+- [Font Awesome for Weather Icons](https://fontawesome.com/) <br />
+- [OpenWeather for Weather Data](https://openweathermap.org/forecast5) <br />
+- [Bootstrap](https://getbootstrap.com/)
 
 
 ## License
