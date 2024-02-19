@@ -101,3 +101,96 @@ function errorMessage(msg, location, duration) {
     location.prepend(alertErrorDiv);
 }
 
+// Get and store current weather
+function getCurrentWeather(cityName, apiKey) {
+    var url =
+        openWeatherQueryUrl +
+        "weather?q=" +
+        cityName +
+        "&appid=" +
+        apiKey +
+        "&units=imperial";
+
+    fetch(url)
+        .then(function (response) {
+            if (!response.ok) {
+                console.log("There is an issue. Status Code: " + response.status);
+                errorMessage(
+                    "No results for " +
+                    cityName +
+                    ". Please try again.",
+                    weatherContentDiv,
+                    4000
+                );
+                return;
+            } else {
+                return response.json();
+            }
+        })
+        .then(function (weatherData) {
+            console.log("Here is the object containing the current weather data");
+            console.log(weatherData);
+            console.log("------------------------------------------------");
+            weatherContentDiv.classList.remove("hide");
+            displayCurrentWeather(weatherData);
+
+            var isNew = true;
+
+            if (localStorage.getItem("cities") !== null) {
+                for (var i = 0; i < existingEntries.length; i++) {
+                    if (existingEntries[i] === weatherData.name) {
+                        isNew = false;
+                    }
+                }
+                if (isNew) {
+                    existingEntries.push(weatherData.name);
+                    localStorage.setItem("cities", JSON.stringify(existingEntries));
+                    createNewCityButton(weatherData.name, usersCityListGroupEl);
+                }
+            } else {
+                existingEntries = [];
+                existingEntries.push(weatherData.name);
+                localStorage.setItem("cities", JSON.stringify(existingEntries));
+                createNewCityButton(weatherData.name, usersCityListGroupEl);
+            }
+        })
+        .catch(function (error) {
+            console.log("There is an error: " + error);
+        });
+}
+
+// Display current Weather
+function displayCurrentWeather(resultObj) {
+    cardTitleEl.textContent =
+        resultObj.name + " (" + getTodaysDate(currentDate) + ") ";
+
+    weatherIconEl.setAttribute(
+        "src",
+        "https://openweathermap.org/img/wn/" + resultObj.weather[0].icon + "@2x.png"
+    );
+    weatherIconEl.setAttribute("alt", resultObj.weather[0].description);
+    cardTitleEl.append(weatherIconEl);
+
+    var tempEl = document.querySelector("#temp");
+    var humidityEl = document.querySelector("#humidity");
+    var windSpeedEl = document.querySelector("#windSpeed");
+
+    if (resultObj.main.temp) {
+        tempEl.textContent = resultObj.main.temp + " °F";
+    } else {
+        tempEl.textContent = "No temperature for this city.";
+    }
+
+    if (resultObj.main.humidity) {
+        humidityEl.textContent = resultObj.main.humidity + "%";
+    } else {
+        humidityEl.textContent = "No humidity for this city.";
+    }
+
+    if (resultObj.wind.speed) {
+        windSpeedEl.textContent = resultObj.wind.speed + " MPH";
+    } else {
+        windSpeedEl.textContent = "No wind speed for this city.";
+    }
+};
+
