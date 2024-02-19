@@ -39,3 +39,27 @@ function handleSearch(event) {
 // Event listener
 searchBtn.addEventListener("click", handleSearch);
 
+// Current date
+var currentDate = new Date();
+function getTodaysDate(date) {
+    var d = new Date(date),
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
+        year = d.getFullYear();
+    return [month, day, year].join("/");
+}
+
+// Format date
+function formatDate(date) {
+    var year = date.split("-")[0];
+    var month = date.split("-")[1];
+    var day = date.split("-")[2];
+    if (month.charAt(0) === "0") {
+        month = month.slice(1);
+    }
+    if (day.charAt(0) === "0") {
+        day = day.slice(1);
+    }
+    return [month, day, year].join("/");
+}
+
