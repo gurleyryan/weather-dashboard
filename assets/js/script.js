@@ -194,3 +194,67 @@ function displayCurrentWeather(resultObj) {
     }
 };
 
+// 5 day forecast
+function getForecast(cityName, apiKey) {
+    var url =
+        openWeatherQueryUrl +
+        "forecast?q=" +
+        cityName +
+        "&appid=" +
+        apiKey +
+        "&units=imperial";
+
+    fetch(url)
+        .then(function (response) {
+            if (!response.ok) {
+                console.log("There is an issue. Status Code: " + response.status);
+                return;
+            } else {
+                return response.json();
+            }
+        })
+        .then(function (forecastData) {
+            console.log("Here is the object containing the forcast data");
+            console.log(forecastData);
+            var ourForecastObject = [];
+
+            for (var i = 0; i < forecastData.list.length; i++) {
+                if (i % 8 === 0) {
+                    ourForecastObject.push({
+                        date: forecastData.list[i].dt_txt.split(" ")[0],
+                        icon: forecastData.list[i].weather[0].icon,
+                        iconAlt: forecastData.list[i].weather[0].description,
+                        temp: forecastData.list[i].main.temp,
+                        wind: forecastData.list[i].wind.speed,
+                        humidity: forecastData.list[i].main.humidity,
+                    });
+                }
+            }
+
+            for (var i = 0; i < ourForecastObject.length; i++) {
+                var dateTitle = document.querySelectorAll(".date-title");
+                var iconEl = document.querySelectorAll("#forecastIcon");
+                var tempSpan = document.querySelectorAll("#tempForecast");
+                var windSpan = document.querySelectorAll("#windForecast");
+                var humiditySpan = document.querySelectorAll("#humidityForecast");
+
+                dateTitle[i].textContent = formatDate(ourForecastObject[i].date);
+                iconEl[i].setAttribute(
+                    "src",
+                    "https://openweathermap.org/img/wn/" +
+                    ourForecastObject[i].icon +
+                    "@2x.png"
+                );
+                iconEl[i].setAttribute("alt", ourForecastObject[i].iconAlt);
+                tempSpan[i].textContent = ourForecastObject[i].temp + " °F";
+                windSpan[i].textContent = ourForecastObject[i].wind + " MPH";
+                humiditySpan[i].textContent = ourForecastObject[i].humidity + "%";
+            }
+
+            console.log(ourForecastObject);
+            console.log("------------------------------------------------");
+        })
+        .catch(function (error) {
+            console.log("There is an error: " + error);
+        });
+}
